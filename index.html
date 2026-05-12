@@ -211,7 +211,9 @@ function jsonpCall(params, callback) {
   var script = document.createElement('script');
   script.src = url;
   window[callbackName] = function(data) { callback(null, data); delete window[callbackName]; document.body.removeChild(script); };
-  script.onerror = function() { callback('Error de red', null); delete window[callbackName]; document.body.removeChild(script); };
+  script.onerror = function(e) {
+  console.log('onerror event:', e);
+  callback('Error de red', null); delete window[callbackName]; document.body.removeChild(script); };
   document.body.appendChild(script);
 }
 
