@@ -4,261 +4,215 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Performance — Club de Tiro</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+Condensed:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root {
-  --bg: #f0f3f8;
-  --bg2: #ffffff;
-  --bg3: #e8edf5;
-  --border: #d0d8e8;
-  --navy: #1a3a6c;
-  --navy2: #243b5e;
-  --accent2: #e8956d;
-  --text: #2c3e50;
-  --muted: #7f8fa6;
-  --white: #ffffff;
-  --red: #e74c3c;
-  --green: #27ae60;
-  --warn: #e67e22;
-  --light-blue: #B5D4F4;
+  --bg: #0a0e1a; --bg2: #111726; --bg3: #1a2236; --bg4: #232d44;
+  --border: #2a3550; --border-strong: #3a4870;
+  --text: #e8ecf4; --text-dim: #9aa5bc; --muted: #5a6680;
+  --accent: #00d4a8; --accent2: #ff9b6b;
+  --blue: #5eb3ff; --purple: #b388ff;
+  --green: #00d4a8; --green-light: #7fffd4;
+  --warn: #ffb547; --red: #ff6b6b;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:"IBM Plex Sans",sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
-
-/* LOGIN */
-#login-screen {
-  min-height:100vh; display:flex; align-items:center; justify-content:center;
-  background:linear-gradient(135deg, #0d1e3a 0%, #1a3a6c 100%);
+html, body { background:var(--bg); color:var(--text); font-family:"Manrope",sans-serif; min-height:100vh; }
+body::before {
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background: radial-gradient(ellipse at top right, rgba(0,212,168,0.06), transparent 50%), radial-gradient(ellipse at bottom left, rgba(255,155,107,0.04), transparent 50%);
 }
-.login-card {
-  background:white; border-radius:8px; padding:48px 40px;
-  text-align:center; width:360px; box-shadow:0 8px 32px rgba(0,0,0,0.3);
-}
-.login-logo {
-  font-family:"IBM Plex Sans Condensed",sans-serif; font-size:24px;
-  font-weight:700; color:var(--navy); letter-spacing:0.05em; text-transform:uppercase;
-}
-.login-logo span { color:var(--accent2); }
-.login-sub {
-  font-family:"IBM Plex Mono",monospace; font-size:11px;
-  color:var(--muted); letter-spacing:0.08em; margin-top:4px; margin-bottom:32px;
-}
+#login-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; position:relative; z-index:1; }
+.login-card { background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:48px 40px; text-align:center; width:380px; box-shadow:0 24px 64px rgba(0,0,0,0.5); }
+.login-logo { font-weight:800; font-size:22px; letter-spacing:-0.02em; margin-bottom:4px; }
+.login-logo span { color:var(--accent); }
+.login-sub { font-family:"JetBrains Mono",monospace; font-size:10px; color:var(--muted); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:32px; }
 .login-divider { height:1px; background:var(--border); margin:24px 0; }
-.login-error {
-  font-size:13px; color:var(--red); margin-top:16px;
-  padding:10px; background:#fdf2f2; border-radius:4px; display:none;
-}
-
-/* HEADER */
-.header {
-  background:var(--navy); border-bottom:3px solid var(--accent2);
-  padding:12px 28px; display:flex; align-items:center; justify-content:space-between;
-}
-.header-logo {
-  font-family:"IBM Plex Sans Condensed",sans-serif; font-size:20px;
-  font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:white;
-}
-.header-logo span { color:var(--accent2); }
-.header-sub {
-  font-family:"IBM Plex Mono",monospace; font-size:10px;
-  color:rgba(255,255,255,0.45); letter-spacing:0.08em; margin-top:2px;
-}
-.header-right { display:flex; align-items:center; gap:16px; }
-.user-info {
-  font-family:"IBM Plex Mono",monospace; font-size:11px;
-  color:rgba(255,255,255,0.6); text-align:right;
-}
-.user-codigo { color:var(--accent2); font-weight:600; font-size:13px; }
-.btn-logout {
-  font-family:"IBM Plex Sans Condensed",sans-serif; font-size:12px;
-  font-weight:600; padding:6px 14px; border:1px solid rgba(255,255,255,0.3);
-  background:transparent; color:rgba(255,255,255,0.6); cursor:pointer;
-  transition:all 0.2s; border-radius:3px;
-}
-.btn-logout:hover { color:white; border-color:white; }
-
-.nav { display:flex; gap:4px; }
-.nav-btn {
-  font-family:"IBM Plex Sans Condensed",sans-serif; font-size:13px; font-weight:600;
-  letter-spacing:0.04em; text-transform:uppercase; padding:7px 18px;
-  border:1px solid rgba(255,255,255,0.2); background:transparent; color:rgba(255,255,255,0.6);
-  cursor:pointer; transition:all 0.2s;
-}
-.nav-btn:hover { color:white; border-color:white; }
-.nav-btn.active { background:var(--accent2); color:white; border-color:var(--accent2); }
-
-/* MAIN */
+.login-loading { font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--text-dim); margin-top:20px; display:none; }
+.login-error { font-size:13px; color:var(--red); margin-top:16px; padding:12px 14px; background:rgba(255,107,107,0.08); border:1px solid rgba(255,107,107,0.3); border-radius:6px; display:none; }
+.g_id_signin { display: inline-block; }
+.header { background:var(--bg2); border-bottom:1px solid var(--border); padding:14px 28px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+.header-left { display:flex; align-items:baseline; gap:14px; }
+.logo { font-weight:800; font-size:18px; letter-spacing:-0.02em; }
+.logo span { color:var(--accent); }
+.tag { font-family:"JetBrains Mono",monospace; font-size:10px; color:var(--muted); letter-spacing:0.15em; text-transform:uppercase; border-left:1px solid var(--border); padding-left:14px; }
+.header-right { display:flex; align-items:center; gap:14px; }
+.nav { display:flex; gap:2px; background:var(--bg); padding:3px; border-radius:8px; border:1px solid var(--border); }
+.nav-btn { font-family:inherit; font-size:13px; font-weight:600; padding:7px 16px; background:transparent; color:var(--text-dim); cursor:pointer; border:none; border-radius:5px; transition:all 0.15s; }
+.nav-btn:hover { color:var(--text); }
+.nav-btn.active { background:var(--bg3); color:var(--accent); box-shadow:inset 0 0 0 1px var(--border-strong); }
+.user-chip { display:flex; align-items:center; gap:10px; padding:5px 12px 5px 5px; background:var(--bg3); border-radius:20px; font-size:12px; color:var(--text-dim); }
+.user-avatar { width:24px; height:24px; border-radius:50%; background:var(--accent); color:var(--bg); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:11px; }
+.btn-logout { font-family:inherit; font-size:11px; padding:5px 10px; background:transparent; color:var(--muted); border:1px solid var(--border); border-radius:4px; cursor:pointer; transition:all 0.15s; }
+.btn-logout:hover { color:var(--red); border-color:var(--red); }
 #app-screen { display:none; }
-.main { padding:24px 28px; margin:0 auto; }
+.main { padding:24px 28px; max-width:1500px; margin:0 auto; position:relative; z-index:1; }
 .page { display:none; }
-.page.active { display:block; animation:fadeIn 0.3s ease; }
-@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
-
-.section-title {
-  font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:600;
-  letter-spacing:0.12em; text-transform:uppercase; color:var(--muted);
-  margin-bottom:12px; display:flex; align-items:center; gap:8px;
+.page.active { display:block; animation:fade 0.3s ease; }
+@keyframes fade { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+.s-title { font-family:"JetBrains Mono",monospace; font-size:10px; font-weight:500; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+.s-title::before { content:""; width:3px; height:3px; background:var(--accent); border-radius:50%; }
+.s-title .accent { color:var(--accent); }
+.s-title-sub { color:var(--text-dim); font-size:11px; margin-left:8px; text-transform:none; letter-spacing:0; font-family:"Manrope",sans-serif; font-weight:400; }
+.stats-grid { display:grid; grid-template-columns:repeat(6, 1fr); gap:12px; margin-bottom:22px; }
+.stat-card { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:14px 16px; position:relative; overflow:hidden; }
+.stat-card::before { content:""; position:absolute; top:0; left:0; right:0; height:2px; background:var(--accent); opacity:0.6; }
+.stat-card.green::before { background:var(--green); }
+.stat-card.orange::before { background:var(--accent2); }
+.stat-card.blue::before { background:var(--blue); }
+.stat-card.purple::before { background:var(--purple); }
+.stat-card.warn::before { background:var(--warn); }
+.stat-label { font-family:"JetBrains Mono",monospace; font-size:9px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:6px; }
+.stat-value { font-size:26px; font-weight:700; line-height:1; letter-spacing:-0.02em; }
+.stat-sub { font-size:10px; color:var(--text-dim); margin-top:4px; font-family:"JetBrains Mono",monospace; }
+.row-2 { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:18px; }
+.card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; }
+.card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.card-title { font-size:14px; font-weight:700; letter-spacing:-0.01em; }
+.card-sub { font-family:"JetBrains Mono",monospace; font-size:10px; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; }
+.ranking-row { display:grid; grid-template-columns:28px 50px 1fr 70px 60px; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); gap:10px; font-size:12px; }
+.ranking-row:last-child { border-bottom:none; }
+.rank-num { font-family:"JetBrains Mono",monospace; font-size:10px; color:var(--muted); font-weight:500; text-align:center; }
+.rank-num.top { color:var(--accent); font-weight:700; }
+.rank-codigo { font-weight:700; font-size:13px; letter-spacing:-0.01em; }
+.rank-bar-wrap { background:var(--bg); border-radius:3px; height:5px; overflow:hidden; }
+.rank-bar { height:100%; border-radius:3px; transition:width 0.4s; }
+.rank-pct { font-family:"JetBrains Mono",monospace; font-size:12px; font-weight:700; text-align:right; }
+.pct-green { color:var(--green); }
+.pct-green-light { color:var(--green-light); }
+.pct-warn { color:var(--warn); }
+.pct-red { color:var(--red); }
+.bar-green { background:linear-gradient(90deg, var(--green), #2cffd8); }
+.bar-green-light { background:linear-gradient(90deg, #7fffd4, #a8ffe2); }
+.bar-warn { background:linear-gradient(90deg, var(--warn), #ffd47e); }
+.bar-red { background:linear-gradient(90deg, var(--red), #ff9b9b); }
+.lista-items { display:flex; flex-direction:column; gap:6px; }
+.lista-item { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; background:var(--bg3); border-radius:6px; font-size:13px; }
+.lista-item-label { color:var(--text); font-weight:500; }
+.lista-item-count { font-family:"JetBrains Mono",monospace; font-size:13px; color:var(--accent); font-weight:700; background:var(--bg); padding:2px 10px; border-radius:10px; }
+.chart-wrap { height:260px; }
+.chart-wrap-tall { height:320px; }
+.grid-sesion { display:grid; grid-template-columns:280px 1fr; gap:18px; }
+.sesion-list .sesion-item { background:var(--bg2); border:1px solid var(--border); border-left:3px solid transparent; border-radius:8px; padding:11px 14px; cursor:pointer; transition:all 0.15s; margin-bottom:6px; }
+.sesion-item:hover { border-left-color:var(--accent2); }
+.sesion-item.active { border-left-color:var(--accent); background:var(--bg3); }
+.sesion-fecha { font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--accent); font-weight:500; }
+.sesion-tipo { font-size:14px; font-weight:700; margin-top:3px; letter-spacing:-0.01em; }
+.sesion-meta { font-size:11px; color:var(--muted); margin-top:2px; font-family:"JetBrains Mono",monospace; }
+.planilla-wrap { overflow-x:auto; border-radius:8px; border:1px solid var(--border); }
+table.planilla { border-collapse:collapse; width:100%; font-size:12px; background:var(--bg2); table-layout:fixed; }
+table.planilla th, table.planilla td { padding:7px 8px; text-align:center; border:1px solid var(--border); }
+th.ej-h { background:var(--bg3); color:var(--text); font-weight:700; font-size:12px; white-space:normal; word-break:break-word; vertical-align:top; line-height:1.3; width:100px; }
+th.ej-h .ej-d { display:block; font-size:9px; font-weight:400; color:var(--text-dim); margin-top:4px; line-height:1.3; }
+th.ej-x { background:rgba(255,155,107,0.12); color:var(--accent2); font-family:"JetBrains Mono",monospace; font-size:10px; font-weight:600; }
+th.t-h { background:var(--bg3); color:var(--text-dim); font-family:"JetBrains Mono",monospace; font-size:10px; font-weight:500; width:52px; }
+th.jug-h { background:var(--bg4); color:var(--text); font-weight:700; font-size:12px; text-align:left; width:58px; }
+table.planilla td { background:var(--bg2); font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--text-dim); }
+td.jug-c { font-family:"Manrope",sans-serif; font-size:14px; font-weight:700; color:var(--text); text-align:left; background:var(--bg3); }
+.val-ok { color:var(--green); font-weight:600; }
+.val-warn { color:var(--warn); font-weight:600; }
+.val-bad { color:var(--red); font-weight:500; }
+.val-em { color:var(--muted); }
+.jug-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(64px,1fr)); gap:6px; margin-bottom:20px; }
+.jug-btn { background:var(--bg2); border:1px solid var(--border); color:var(--text-dim); padding:11px 6px; font-size:14px; font-weight:700; border-radius:6px; cursor:pointer; transition:all 0.15s; font-family:inherit; }
+.jug-btn:hover { border-color:var(--accent); color:var(--accent); }
+.jug-btn.active { background:var(--accent); color:var(--bg); border-color:var(--accent); }
+.hist-item { background:var(--bg2); border:1px solid var(--border); border-radius:10px; margin-bottom:8px; overflow:hidden; }
+.hist-head { padding:11px 16px; display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-bottom:1px solid var(--border); }
+.hist-fecha { font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--accent); font-weight:500; }
+.hist-meta { font-size:13px; font-weight:600; }
+.hist-body { padding:14px 16px; }
+.hist-ej-row { display:grid; grid-template-columns:40px 1fr 80px 80px; gap:14px; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
+.hist-ej-row:last-child { border-bottom:none; }
+.hist-ej-num { font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--accent); background:var(--bg3); padding:3px 8px; border-radius:4px; text-align:center; font-weight:600; }
+.hist-ej-desc { color:var(--text-dim); font-size:12px; }
+.hist-ej-score { font-family:"JetBrains Mono",monospace; font-size:14px; font-weight:700; text-align:right; }
+.hist-ej-pct { font-family:"JetBrains Mono",monospace; font-size:12px; text-align:right; font-weight:600; }
+.ej-list .ej-row { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:14px 18px; margin-bottom:8px; display:grid; grid-template-columns:50px 1fr 100px 100px 90px 110px; gap:18px; align-items:center; }
+.ej-num { font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--accent); background:var(--bg3); padding:5px 8px; border-radius:5px; text-align:center; font-weight:600; }
+.ej-desc { font-size:13px; }
+.ej-desc .ej-title { font-weight:600; color:var(--text); margin-bottom:3px; line-height:1.3; }
+.ej-desc .ej-sub { font-size:11px; color:var(--muted); font-family:"JetBrains Mono",monospace; }
+.ej-metric { text-align:center; }
+.ej-metric-val { font-family:"JetBrains Mono",monospace; font-size:18px; font-weight:700; }
+.ej-metric-lbl { font-family:"JetBrains Mono",monospace; font-size:9px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin-top:2px; }
+.empty { padding:60px 40px; text-align:center; color:var(--muted); font-family:"JetBrains Mono",monospace; font-size:12px; }
+.loading { padding:50px; text-align:center; color:var(--muted); font-family:"JetBrains Mono",monospace; font-size:12px; }
+@media (max-width:1100px) {
+  .stats-grid { grid-template-columns:repeat(3, 1fr); }
+  .row-2 { grid-template-columns:1fr; }
+  .grid-sesion { grid-template-columns:1fr; }
+  .ej-row { grid-template-columns:50px 1fr; }
+  .ej-row .ej-metric { display:none; }
 }
-.section-title::after { content:""; flex:1; height:1px; background:var(--border); }
-
-.grid-2 { display:grid; grid-template-columns:240px 1fr; gap:20px; }
-
-/* SESIONES */
-.sesion-item {
-  padding:10px 12px; border:1px solid var(--border); border-left:3px solid transparent;
-  cursor:pointer; transition:all 0.15s; margin-bottom:5px; background:var(--bg2);
-  border-radius:3px;
-}
-.sesion-item:hover { border-left-color:var(--accent2); background:#f8fafd; }
-.sesion-item.active { border-left-color:var(--navy); background:#eef3fb; }
-.sesion-fecha { font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--navy); font-weight:600; }
-.sesion-nombre { font-family:"IBM Plex Sans Condensed",sans-serif; font-size:14px; font-weight:700; color:var(--text); margin-top:2px; }
-.badge { font-family:"IBM Plex Mono",monospace; font-size:10px; padding:2px 7px; border-radius:2px; display:inline-block; margin-top:3px; }
-.badge-mojado { color:#c0552a; background:#fde8da; }
-.badge-seco { color:#1a5276; background:#d6eaf8; }
-
-/* PLANILLA */
-.planilla-wrap { overflow-x:auto; }
-table.planilla {
-  border-collapse:collapse; font-size:12px; width:100%;
-  background:white; border-radius:4px; overflow:hidden;
-  box-shadow:0 1px 4px rgba(0,0,0,0.08); table-layout:fixed;
-}
-table.planilla th { padding:6px 8px; text-align:center; border:1px solid var(--border); }
-th.ej-main {
-  background:var(--navy); color:var(--light-blue);
-  font-family:"IBM Plex Sans Condensed",sans-serif; font-size:12px; font-weight:700;
-  white-space:normal; word-break:break-word; vertical-align:top; line-height:1.3; width:90px;
-}
-th.ej-desc { display:block; font-size:9px; font-weight:400; color:rgba(255,255,255,0.6); margin-top:3px; white-space:normal; line-height:1.3; }
-th.ej-exig { background:var(--accent2); color:white; font-family:"IBM Plex Mono",monospace; font-size:10px; font-weight:600; }
-th.target-header { background:var(--bg3); color:var(--navy2); font-family:"IBM Plex Mono",monospace; font-size:10px; font-weight:600; width:50px; }
-th.jugador-header { background:var(--navy2); color:white; font-family:"IBM Plex Sans Condensed",sans-serif; font-size:12px; font-weight:700; text-align:left; width:55px; }
-table.planilla td { padding:6px 8px; border:1px solid #edf0f5; text-align:center; font-family:"IBM Plex Mono",monospace; font-size:12px; }
-td.jugador-cell { font-family:"IBM Plex Sans Condensed",sans-serif; font-size:14px; font-weight:700; color:var(--navy); text-align:left; background:#f8fafd; white-space:nowrap; }
-table.planilla tr:nth-child(even) td { background:#fafbfd; }
-table.planilla tr:nth-child(even) td.jugador-cell { background:#f0f4fa; }
-table.planilla tr:hover td { background:#eef6ff !important; }
-.val-ok { color:var(--green); font-weight:700; }
-.val-warn { color:var(--warn); font-weight:700; }
-.val-bad { color:var(--red); font-weight:600; }
-.val-empty { color:#ccc; }
-
-/* JUGADORES */
-.jugador-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(60px,1fr)); gap:5px; margin-bottom:20px; }
-.jugador-btn {
-  font-family:"IBM Plex Sans Condensed",sans-serif; font-size:14px; font-weight:700;
-  padding:9px 5px; border:1px solid var(--border); background:var(--bg2);
-  color:var(--muted); cursor:pointer; text-align:center; transition:all 0.15s; border-radius:3px;
-}
-.jugador-btn:hover { border-color:var(--navy); color:var(--navy); }
-.jugador-btn.active { background:var(--navy); color:white; border-color:var(--navy); }
-
-/* HISTORIAL */
-.historial-ej { border:1px solid var(--border); margin-bottom:7px; border-radius:4px; overflow:hidden; background:white; }
-.historial-ej-header { padding:9px 14px; display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-bottom:1px solid var(--border); }
-.historial-fecha { font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--navy); font-weight:600; }
-.historial-tipo { font-family:"IBM Plex Sans Condensed",sans-serif; font-size:14px; font-weight:700; color:var(--text); }
-.historial-ej-body { padding:11px 14px; display:flex; gap:18px; align-items:center; }
-.historial-score { font-family:"IBM Plex Sans Condensed",sans-serif; font-size:34px; font-weight:700; line-height:1; min-width:75px; }
-.historial-score.ok { color:var(--green); }
-.historial-score.bad { color:var(--red); }
-.historial-score.warn { color:var(--warn); }
-.historial-desc { font-size:13px; color:var(--muted); flex:1; line-height:1.4; }
-.historial-exig { font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--muted); margin-top:5px; }
-
-/* STATS */
-.stat-row { display:flex; gap:10px; margin-bottom:18px; }
-.stat-box { background:white; border:1px solid var(--border); padding:12px 18px; flex:1; border-radius:4px; border-top:3px solid var(--border); }
-.stat-box.green { border-top-color:var(--green); }
-.stat-box.orange { border-top-color:var(--warn); }
-.stat-box.navy { border-top-color:var(--navy); }
-.stat-val { font-family:"IBM Plex Sans Condensed",sans-serif; font-size:32px; font-weight:700; color:var(--text); }
-.stat-lbl { font-family:"IBM Plex Mono",monospace; font-size:10px; color:var(--muted); margin-top:3px; letter-spacing:0.05em; }
-.stat-val.green { color:var(--green); }
-.stat-val.orange { color:var(--warn); }
-
-.loading { text-align:center; padding:50px; font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--muted); }
-.empty-msg { padding:40px; text-align:center; font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--muted); }
 </style>
 </head>
 <body>
-
-<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-card">
-    <div class="login-logo">Club de Tiro // <span>Performance</span></div>
-    <div class="login-sub">SISTEMA DE ANÁLISIS TÁCTICO · 2026</div>
+    <div class="login-logo">Club de Tiro <span>// Performance</span></div>
+    <div class="login-sub">Sistema de Análisis 2026</div>
     <div class="login-divider"></div>
-    <div id="g_id_onload"
-      data-client_id="212701944710-iahvd45fa59qtvgg4ujt8q69qohocd2i.apps.googleusercontent.com"
-      data-callback="handleCredentialResponse"
-      data-auto_select="true">
-    </div>
-    <div class="g_id_signin"
-      data-type="standard"
-      data-size="large"
-      data-theme="outline"
-      data-text="sign_in_with"
-      data-shape="rectangular"
-      data-logo_alignment="left">
-    </div>
+    <div id="g_id_onload" data-client_id="212701944710-iahvd45fa59qtvgg4ujt8q69qohocd2i.apps.googleusercontent.com" data-callback="handleCredentialResponse" data-auto_select="true"></div>
+    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="filled_black" data-text="signin_with" data-shape="rectangular"></div>
+    <div class="login-loading" id="login-loading">Validando acceso...</div>
     <div class="login-error" id="login-error"></div>
   </div>
 </div>
 
-<!-- APP -->
 <div id="app-screen">
   <header class="header">
-    <div>
-      <div class="header-logo">Club de Tiro // <span>Performance</span></div>
-      <div class="header-sub">SISTEMA DE ANÁLISIS TÁCTICO · 2026</div>
+    <div class="header-left">
+      <div class="logo">Club de Tiro <span>// Performance</span></div>
+      <div class="tag">Sistema 2026</div>
     </div>
+    <nav class="nav">
+      <button class="nav-btn active" onclick="nav('overview', this)">Overview</button>
+      <button class="nav-btn" onclick="nav('sesiones', this)">Sesiones</button>
+      <button class="nav-btn" onclick="nav('jugadores', this)">Jugadores</button>
+      <button class="nav-btn" onclick="nav('ejercicios', this)">Ejercicios</button>
+    </nav>
     <div class="header-right">
-      <nav class="nav">
-        <button class="nav-btn active" onclick="showPage('sesiones', this)">Sesiones</button>
-        <button class="nav-btn" onclick="showPage('jugadores', this)">Jugadores</button>
-      </nav>
-      <div class="user-info">
-        <div class="user-codigo" id="user-codigo"></div>
-        <div id="user-email"></div>
-      </div>
+      <div class="user-chip"><div class="user-avatar" id="user-avatar"></div><span id="user-codigo"></span></div>
       <button class="btn-logout" onclick="logout()">Salir</button>
     </div>
   </header>
-
   <main class="main">
-    <div class="page active" id="page-sesiones">
-      <div class="grid-2">
-        <div>
-          <div class="section-title">Sesiones</div>
-          <div id="lista-sesiones"><div class="loading">Cargando</div></div>
-        </div>
-        <div>
-          <div class="section-title">Resultados</div>
-          <div id="detalle-sesion"><div class="empty-msg">← Selecciona una sesión</div></div>
-        </div>
+    <div class="page active" id="page-overview"><div id="ov-content"><div class="loading">Cargando overview...</div></div></div>
+    <div class="page" id="page-sesiones">
+      <div class="grid-sesion">
+        <div><div class="s-title">Sesiones</div><div id="lista-sesiones" class="sesion-list"><div class="loading">Cargando</div></div></div>
+        <div><div class="s-title">Resultados</div><div id="detalle-sesion"><div class="empty">← Selecciona una sesión</div></div></div>
       </div>
     </div>
-
     <div class="page" id="page-jugadores">
-      <div class="section-title">Seleccionar Jugador</div>
+      <div class="s-title">Jugadores</div>
       <div id="jugadores-grid"><div class="loading">Cargando</div></div>
       <div id="historial-jugador"></div>
+    </div>
+    <div class="page" id="page-ejercicios">
+      <div class="s-title">Estadísticas por Ejercicio <span class="s-title-sub">ordenado por dificultad</span></div>
+      <div id="ejercicios-list" class="ej-list"><div class="loading">Cargando</div></div>
     </div>
   </main>
 </div>
 
 <script>
-var APPS_SCRIPT_URL = "https://script.google.com/a/macros/dorcocapital.com/s/AKfycbzHULqhWTuJPuCsaHpfnXj8t2X0sFB3IufY2cjc9nJXp_2o1yfS-4EJFSo85cB8sBo/exec";
+var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMLO5Ny3z8MfnVvTa9LAmLtJA-7nSFQsZ92Ny3CIAFLRxqMFAEdBFGFDN7ugl1q-s/exec";
 var currentUser = null;
+var jsonpCounter = 0;
 
-// ── AUTH ──
-function handleCredentialResponse(response) {
-  var payload = parseJwt(response.credential);
-  var email = payload.email;
-  validateUser(email, payload.name);
+function jsonpCall(params, callback) {
+  jsonpCounter++;
+  var callbackName = 'jsonpCb' + jsonpCounter;
+  var url = APPS_SCRIPT_URL + '?callback=' + callbackName;
+  Object.keys(params).forEach(function(k) { url += '&' + k + '=' + encodeURIComponent(params[k]); });
+  var script = document.createElement('script');
+  script.src = url;
+  window[callbackName] = function(data) { callback(null, data); delete window[callbackName]; document.body.removeChild(script); };
+  script.onerror = function() { callback('Error de red', null); delete window[callbackName]; document.body.removeChild(script); };
+  document.body.appendChild(script);
 }
 
 function parseJwt(token) {
@@ -266,255 +220,302 @@ function parseJwt(token) {
   return JSON.parse(atob(base64));
 }
 
-function validateUser(email, name) {
-  fetch(APPS_SCRIPT_URL + "?action=validateUser&email=" + encodeURIComponent(email))
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (data.success) {
-        currentUser = data.user;
-        localStorage.setItem("performance_user", JSON.stringify(currentUser));
-        showApp();
-      } else {
-        showError("Tu cuenta (" + email + ") no tiene acceso a este dashboard.");
-      }
-    })
-    .catch(function() {
-      showError("Error de conexión. Intenta de nuevo.");
-    });
-}
+function handleCredentialResponse(response) {
+  var payload = parseJwt(response.credential);
+  var email = payload.email;
+  var loadingEl = document.getElementById('login-loading');
+  var errorEl = document.getElementById('login-error');
+  errorEl.style.display = 'none';
+  loadingEl.style.display = 'block';
 
-function showError(msg) {
-  var el = document.getElementById("login-error");
-  el.textContent = msg;
-  el.style.display = "block";
+  jsonpCall({ action: 'validateUser', email: email }, function(err, data) {
+    if (err) { loadingEl.style.display = 'none'; errorEl.textContent = 'Error de conexión: ' + err; errorEl.style.display = 'block'; return; }
+    if (data && data.success) {
+      currentUser = data.user;
+      localStorage.setItem('perf_user', JSON.stringify(currentUser));
+      showApp();
+    } else {
+      loadingEl.style.display = 'none';
+      errorEl.textContent = (data && data.error ? data.error : 'Sin acceso') + ' (' + email + ')';
+      errorEl.style.display = 'block';
+    }
+  });
 }
 
 function showApp() {
-  document.getElementById("login-screen").style.display = "none";
-  document.getElementById("app-screen").style.display = "block";
-  document.getElementById("user-codigo").textContent = currentUser.codigo || currentUser.nombre;
-  document.getElementById("user-email").textContent = currentUser.email;
-  loadSesiones();
-  loadJugadores();
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'block';
+  var codigo = currentUser.codigo || (currentUser.nombre || '').substring(0, 2).toUpperCase();
+  document.getElementById('user-codigo').textContent = codigo;
+  document.getElementById('user-avatar').textContent = codigo.substring(0, 2);
+  loadOverview();
 }
 
 function logout() {
-  localStorage.removeItem("performance_user");
+  localStorage.removeItem('perf_user');
   currentUser = null;
-  document.getElementById("login-screen").style.display = "flex";
-  document.getElementById("app-screen").style.display = "none";
-  google.accounts.id.disableAutoSelect();
+  if (window.google && google.accounts && google.accounts.id) google.accounts.id.disableAutoSelect();
+  location.reload();
 }
 
-// Auto-login si hay sesión guardada
-window.onload = function() {
-  var saved = localStorage.getItem("performance_user");
-  if (saved) {
-    try {
-      currentUser = JSON.parse(saved);
-      showApp();
-    } catch(e) {
-      localStorage.removeItem("performance_user");
-    }
-  }
-};
+window.addEventListener('DOMContentLoaded', function() {
+  var saved = localStorage.getItem('perf_user');
+  if (saved) { try { currentUser = JSON.parse(saved); showApp(); } catch(e) { localStorage.removeItem('perf_user'); } }
+});
 
-// ── NAVEGACIÓN ──
-function showPage(name, el) {
+function nav(name, el) {
   document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
   document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
   document.getElementById('page-' + name).classList.add('active');
   el.classList.add('active');
+  if (name === 'overview' && !overviewLoaded) loadOverview();
+  if (name === 'sesiones' && !sesionesLoaded) loadSesiones();
+  if (name === 'jugadores' && !jugadoresLoaded) loadJugadores();
+  if (name === 'ejercicios' && !ejerciciosLoaded) loadEjercicios();
 }
 
-// ── API ──
-function apiCall(endpoint) {
-  return fetch(APPS_SCRIPT_URL + "?action=" + endpoint)
-    .then(function(r) { return r.json(); });
+function colorClass(pct, exigPct) { if (pct >= exigPct) return { txt: 'pct-green', bar: 'bar-green' }; if (pct >= exigPct * 0.8) return { txt: 'pct-warn', bar: 'bar-warn' }; return { txt: 'pct-red', bar: 'bar-red' }; }
+function colorByCumplimiento(pct) { if (pct >= 100) return { txt: 'pct-green', bar: 'bar-green' }; if (pct >= 85) return { txt: 'pct-green-light', bar: 'bar-green-light' }; if (pct >= 70) return { txt: 'pct-warn', bar: 'bar-warn' }; return { txt: 'pct-red', bar: 'bar-red' }; }
+function colorByPct(pct) { if (pct >= 70) return { txt: 'pct-green', bar: 'bar-green' }; if (pct >= 50) return { txt: 'pct-warn', bar: 'bar-warn' }; return { txt: 'pct-red', bar: 'bar-red' }; }
+
+var overviewLoaded = false;
+var chartDistribucion = null;
+function loadOverview() {
+  jsonpCall({ action: 'getOverview' }, function(err, data) {
+    if (err || data.error) { document.getElementById('ov-content').innerHTML = '<div class="empty">Error: ' + (err || data.error) + '</div>'; return; }
+    overviewLoaded = true;
+    renderOverview(data);
+  });
 }
 
-function apiCallWithParam(endpoint, param, value) {
-  return fetch(APPS_SCRIPT_URL + "?action=" + endpoint + "&" + param + "=" + encodeURIComponent(value))
-    .then(function(r) { return r.json(); });
+function renderOverview(data) {
+  var s = data.stats;
+  var html = '';
+  var countMojado = 0, countSeco = 0, countEscenarios = 0;
+  data.tipos.forEach(function(t) {
+    var tipo = (t.tipo || '').toLowerCase();
+    if (tipo.includes('mojado')) countMojado += t.count;
+    else if (tipo.includes('seco')) countSeco += t.count;
+    else if (tipo.includes('escenario')) countEscenarios += t.count;
+  });
+  html += '<div class="s-title">Resumen <span class="accent">Global</span></div>';
+  html += '<div class="stats-grid">';
+  html += '<div class="stat-card green"><div class="stat-label">% Cumplen Exig.</div><div class="stat-value pct-green">' + s.pctCumplenExigencia + '%</div><div class="stat-sub">jugadores 100%</div></div>';
+  html += '<div class="stat-card blue"><div class="stat-label">Jugadores</div><div class="stat-value">' + s.totalJugadores + '</div><div class="stat-sub">con resultados</div></div>';
+  html += '<div class="stat-card"><div class="stat-label">Mojados</div><div class="stat-value">' + countMojado + '</div><div class="stat-sub">sesiones</div></div>';
+  html += '<div class="stat-card orange"><div class="stat-label">Secos</div><div class="stat-value">' + countSeco + '</div><div class="stat-sub">sesiones</div></div>';
+  html += '<div class="stat-card purple"><div class="stat-label">Escenarios</div><div class="stat-value">' + countEscenarios + '</div><div class="stat-sub">sesiones</div></div>';
+  html += '<div class="stat-card warn"><div class="stat-label">Disparos</div><div class="stat-value">' + s.totalDisparos + '</div><div class="stat-sub">aciertos totales</div></div>';
+  html += '</div>';
+
+  html += '<div class="row-2">';
+  html += '<div class="card"><div class="card-header"><div class="card-title">Distribución de Cumplimiento</div><div class="card-sub">jugadores por rango</div></div><div class="chart-wrap"><canvas id="chart-dist"></canvas></div></div>';
+  html += '<div class="card"><div class="card-header"><div class="card-title">Temas de Entrenamientos</div><div class="card-sub">total sesiones</div></div><div class="lista-items">';
+  data.temas.forEach(function(t) { html += '<div class="lista-item"><div class="lista-item-label">' + t.tema + '</div><div class="lista-item-count">' + t.count + '</div></div>'; });
+  if (data.temas.length === 0) html += '<div class="empty">Sin temas registrados</div>';
+  html += '</div></div></div>';
+
+  html += '<div class="row-2">';
+  html += '<div class="card"><div class="card-header"><div class="card-title">Ranking · Cumplimiento</div><div class="card-sub">% ejercicios sobre exig.</div></div>';
+  data.rankingCumplimiento.forEach(function(j, i) {
+    var col = colorByCumplimiento(j.pctCumplimiento);
+    var topClass = i < 3 ? ' top' : '';
+    html += '<div class="ranking-row"><div class="rank-num' + topClass + '">' + (i + 1).toString().padStart(2, '0') + '</div><div class="rank-codigo">' + j.codigo + '</div><div class="rank-bar-wrap"><div class="rank-bar ' + col.bar + '" style="width:' + j.pctCumplimiento + '%"></div></div><div class="rank-pct ' + col.txt + '">' + j.pctCumplimiento + '%</div><div class="rank-pct" style="color:var(--muted);font-size:10px">' + j.ejerciciosCumplidos + '/' + j.ejerciciosTotal + '</div></div>';
+  });
+  html += '</div>';
+  html += '<div class="card"><div class="card-header"><div class="card-title">Ranking · Performance</div><div class="card-sub">% aciertos totales</div></div>';
+  data.rankingAciertos.forEach(function(j, i) {
+    var col = colorByPct(j.pctAciertos);
+    var topClass = i < 3 ? ' top' : '';
+    html += '<div class="ranking-row"><div class="rank-num' + topClass + '">' + (i + 1).toString().padStart(2, '0') + '</div><div class="rank-codigo">' + j.codigo + '</div><div class="rank-bar-wrap"><div class="rank-bar ' + col.bar + '" style="width:' + j.pctAciertos + '%"></div></div><div class="rank-pct ' + col.txt + '">' + j.pctAciertos + '%</div><div class="rank-pct" style="color:var(--muted);font-size:10px">' + j.totalAciertos + '/' + j.totalAmmo + '</div></div>';
+  });
+  html += '</div></div>';
+
+  document.getElementById('ov-content').innerHTML = html;
+
+  if (chartDistribucion) chartDistribucion.destroy();
+  var ctx = document.getElementById('chart-dist').getContext('2d');
+  var colors = data.distribucion.map(function(b) {
+    if (b.min >= 100) return '#00d4a8';
+    if (b.min >= 85) return '#7fffd4';
+    if (b.min >= 70) return '#ffb547';
+    return '#ff6b6b';
+  });
+  chartDistribucion = new Chart(ctx, {
+    type: 'bar',
+    data: { labels: data.distribucion.map(function(b) { return b.rango; }), datasets: [{ data: data.distribucion.map(function(b) { return b.count; }), backgroundColor: colors, borderRadius: 4 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a2236', borderColor: '#2a3550', borderWidth: 1, titleColor: '#e8ecf4', bodyColor: '#9aa5bc' } },
+      scales: { y: { grid: { color: '#1a2236' }, ticks: { color: '#5a6680', font: { family: 'JetBrains Mono', size: 10 }, stepSize: 1 } }, x: { grid: { display: false }, ticks: { color: '#5a6680', font: { family: 'JetBrains Mono', size: 9 } } } }
+    }
+  });
 }
 
-// ── SESIONES ──
+var sesionesLoaded = false;
 function loadSesiones() {
-  apiCall("getSesiones")
-    .then(function(data) {
-      var cont = document.getElementById('lista-sesiones');
-      if (!data.sesiones || data.sesiones.length === 0) {
-        cont.innerHTML = '<div class="loading">Sin sesiones</div>';
-        return;
-      }
-      cont.innerHTML = data.sesiones.map(function(s) {
-        var isMojado = (s.tipo || '').toLowerCase().includes('mojado');
-        var badgeClass = isMojado ? 'badge-mojado' : 'badge-seco';
-        return '<div class="sesion-item" onclick="loadDetalleSesion(\'' + s.id + '\', this)">' +
-          '<div class="sesion-fecha">' + s.fecha + '</div>' +
-          '<div class="sesion-nombre">' + s.tipo + ' · ' + s.grupo + '</div>' +
-          '<span class="badge ' + badgeClass + '">' + (s.tipo || '') + '</span>' +
-          '</div>';
-      }).join('');
-    })
-    .catch(function(err) {
-      document.getElementById('lista-sesiones').innerHTML = '<div class="loading">Error cargando sesiones</div>';
-    });
+  jsonpCall({ action: 'getSesiones' }, function(err, data) {
+    if (err || data.error) return;
+    sesionesLoaded = true;
+    var cont = document.getElementById('lista-sesiones');
+    if (!data.sesiones || data.sesiones.length === 0) { cont.innerHTML = '<div class="empty">Sin sesiones</div>'; return; }
+    cont.innerHTML = data.sesiones.map(function(s) {
+      return '<div class="sesion-item" onclick="loadDetalleSesion(\'' + s.id + '\', this)"><div class="sesion-fecha">' + s.fechaDisplay + '</div><div class="sesion-tipo">' + s.tipo + ' · ' + s.grupo + '</div><div class="sesion-meta">' + (s.madrijim || '') + '</div></div>';
+    }).join('');
+  });
 }
 
 function loadDetalleSesion(idSesion, el) {
   document.querySelectorAll('.sesion-item').forEach(function(e) { e.classList.remove('active'); });
   el.classList.add('active');
   var cont = document.getElementById('detalle-sesion');
-  cont.innerHTML = '<div class="loading">Cargando resultados</div>';
-  apiCallWithParam("getSesionDetalle", "idSesion", idSesion)
-    .then(function(data) { cont.innerHTML = renderPlanilla(data); })
-    .catch(function() { cont.innerHTML = '<div class="loading">Error cargando resultados</div>'; });
+  cont.innerHTML = '<div class="loading">Cargando...</div>';
+  jsonpCall({ action: 'getSesionDetalle', idSesion: idSesion }, function(err, data) {
+    if (err || data.error) { cont.innerHTML = '<div class="empty">Error</div>'; return; }
+    cont.innerHTML = renderPlanilla(data);
+  });
 }
 
 function renderPlanilla(data) {
-  if (!data.ejercicios || data.ejercicios.length === 0) {
-    return '<div class="empty-msg">Sin ejercicios registrados</div>';
-  }
-
-  var ejercicios = data.ejercicios;
-  var targetsMap = data.targetsMap || {};
-  var resultadosEjMap = data.resultadosEjMap || {};
-  var resultadosTarMap = data.resultadosTarMap || {};
-  var mapaEq = data.mapaEq || {};
-
-  var emailsSet = {};
-  ejercicios.forEach(function(ej) {
-    (resultadosEjMap[ej.id] || []).forEach(function(r) { emailsSet[r.email] = true; });
-  });
-  var emails = Object.keys(emailsSet).sort(function(a, b) {
-    return (mapaEq[a] || a).localeCompare(mapaEq[b] || b);
-  });
+  if (!data.ejercicios || data.ejercicios.length === 0) return '<div class="empty">Sin ejercicios registrados</div>';
+  var ej = data.ejercicios, tm = data.targetsMap || {}, rem = data.resultadosEjMap || {}, rtm = data.resultadosTarMap || {}, me = data.mapaEq || {};
+  var emails = {};
+  ej.forEach(function(e) { (rem[e.id] || []).forEach(function(r) { emails[r.email] = true; }); });
+  var emList = Object.keys(emails).sort(function(a, b) { return (me[a] || a).localeCompare(me[b] || b); });
 
   var html = '<div class="planilla-wrap"><table class="planilla">';
-
-  html += '<tr><th class="jugador-header" rowspan="3">Jug.</th>';
-  ejercicios.forEach(function(ej) {
-    var targets = targetsMap[ej.id] || [];
-    var cols = targets.length || 1;
-    html += '<th class="ej-main" colspan="' + cols + '">Ej ' + ej.numero + ' · ' + (ej.distancia || '') + 'm<span class="ej-desc">' + (ej.descripcion || '') + '</span></th>';
+  html += '<tr><th class="jug-h" rowspan="3">Jug.</th>';
+  ej.forEach(function(e) { var ts = tm[e.id] || []; html += '<th class="ej-h" colspan="' + (ts.length || 1) + '">Ej ' + e.numero + ' · ' + (e.distancia || '') + 'm<span class="ej-d">' + (e.descripcion || '') + '</span></th>'; });
+  html += '</tr><tr>';
+  ej.forEach(function(e) {
+    var ts = tm[e.id] || [];
+    var exigNum = e.exigPct ? Math.round(e.ammo * e.exigPct) : '—';
+    var exigPct = e.exigPct ? Math.round(e.exigPct * 100) + '%' : '';
+    html += '<th class="ej-x" colspan="' + (ts.length || 1) + '">' + exigNum + '/' + e.ammo + ' · ' + exigPct + '</th>';
+  });
+  html += '</tr><tr>';
+  ej.forEach(function(e) {
+    var ts = tm[e.id] || [];
+    if (ts.length === 0) html += '<th class="t-h">Total</th>';
+    else ts.forEach(function(t) { html += '<th class="t-h">' + (t.tipo || 'Total') + '</th>'; });
   });
   html += '</tr>';
 
-  html += '<tr>';
-  ejercicios.forEach(function(ej) {
-    var targets = targetsMap[ej.id] || [];
-    var cols = targets.length || 1;
-    var exigNum = ej.exigPct ? Math.round((ej.ammo || 0) * parseFloat(ej.exigPct)) : '—';
-    var exigPct = ej.exigPct ? Math.round(parseFloat(ej.exigPct) * 100) + '%' : '';
-    html += '<th class="ej-exig" colspan="' + cols + '">' + exigNum + '/' + (ej.ammo || '') + ' · ' + exigPct + '</th>';
-  });
-  html += '</tr>';
-
-  html += '<tr>';
-  ejercicios.forEach(function(ej) {
-    var targets = targetsMap[ej.id] || [];
-    if (targets.length === 0) {
-      html += '<th class="target-header">Total</th>';
-    } else {
-      targets.forEach(function(tar) {
-        html += '<th class="target-header">' + (tar.tipo || 'Total') + '</th>';
-      });
-    }
-  });
-  html += '</tr>';
-
-  emails.forEach(function(email) {
-    var codigo = mapaEq[email] || email;
-    html += '<tr><td class="jugador-cell">' + codigo + '</td>';
-    ejercicios.forEach(function(ej) {
-      var resArr = resultadosEjMap[ej.id] || [];
-      var resJug = null;
-      for (var x = 0; x < resArr.length; x++) {
-        if (resArr[x].email === email) { resJug = resArr[x]; break; }
-      }
-      var targets = targetsMap[ej.id] || [];
-      var exig = ej.exigPct ? Math.round((ej.ammo || 0) * parseFloat(ej.exigPct)) : 0;
-
-      if (!resJug) {
-        html += '<td colspan="' + (targets.length || 1) + '" class="val-empty">—</td>';
-      } else {
-        var tarRes = resultadosTarMap[resJug.idResultado] || [];
-        if (targets.length === 0) {
+  emList.forEach(function(em) {
+    html += '<tr><td class="jug-c">' + (me[em] || em) + '</td>';
+    ej.forEach(function(e) {
+      var rArr = rem[e.id] || [];
+      var rJug = null;
+      for (var x = 0; x < rArr.length; x++) if (rArr[x].email === em) { rJug = rArr[x]; break; }
+      var ts = tm[e.id] || [];
+      var exigPct = (e.exigPct || 0) * 100;
+      if (!rJug) html += '<td colspan="' + (ts.length || 1) + '" class="val-em">—</td>';
+      else {
+        var tarRes = rtm[rJug.id] || [];
+        if (ts.length === 0) {
           var total = tarRes.reduce(function(s, t) { return s + (Number(t.aciertos) || 0); }, 0);
-          var cls = exig > 0 ? (total >= exig ? 'val-ok' : total >= exig * 0.7 ? 'val-warn' : 'val-bad') : '';
+          var pct = e.ammo > 0 ? (total / e.ammo * 100) : 0;
+          var cls = colorClass(pct, exigPct).txt.replace('pct-', 'val-').replace('val-green', 'val-ok').replace('val-red', 'val-bad');
           html += '<td class="' + cls + '">' + (total || '—') + '</td>';
         } else {
-          targets.forEach(function(tar, tidx) {
-            var tr2 = tarRes[tidx];
-            var ac = tr2 ? tr2.aciertos : '';
-            var tarExig = tar.ammo ? Math.round(tar.ammo * parseFloat(ej.exigPct || 0)) : 0;
-            var cls2 = tarExig > 0 ? (Number(ac) >= tarExig ? 'val-ok' : Number(ac) >= tarExig * 0.7 ? 'val-warn' : 'val-bad') : '';
-            html += '<td class="' + cls2 + '">' + (ac !== '' && ac !== null ? ac : '—') + '</td>';
+          ts.forEach(function(t, ti) {
+            var tr = tarRes[ti];
+            var ac = tr ? tr.aciertos : '';
+            var pct = (t.ammo > 0 && ac !== '') ? (ac / t.ammo * 100) : 0;
+            var cls = ac !== '' && ac !== null ? colorClass(pct, exigPct).txt.replace('pct-', 'val-').replace('val-green', 'val-ok').replace('val-red', 'val-bad') : 'val-em';
+            html += '<td class="' + cls + '">' + (ac !== '' && ac !== null ? ac : '—') + '</td>';
           });
         }
       }
     });
     html += '</tr>';
   });
-
   html += '</table></div>';
   return html;
 }
 
-// ── JUGADORES ──
+var jugadoresLoaded = false;
 function loadJugadores() {
-  apiCall("getJugadores")
-    .then(function(data) {
-      var cont = document.getElementById('jugadores-grid');
-      if (!data.jugadores) return;
-      cont.innerHTML = '<div class="jugador-grid">' +
-        data.jugadores.map(function(j) {
-          return '<button class="jugador-btn" onclick="loadHistorial(\'' + j.email + '\', this)">' + j.codigo + '</button>';
-        }).join('') + '</div>';
-    });
+  jsonpCall({ action: 'getJugadores' }, function(err, data) {
+    if (err || data.error) return;
+    jugadoresLoaded = true;
+    var cont = document.getElementById('jugadores-grid');
+    cont.innerHTML = '<div class="jug-grid">' + data.jugadores.map(function(j) {
+      return '<button class="jug-btn" onclick="loadHistorial(\'' + j.email + '\', this)">' + j.codigo + '</button>';
+    }).join('') + '</div>';
+  });
 }
 
+var chartEvolucion = null;
 function loadHistorial(email, el) {
-  document.querySelectorAll('.jugador-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.jug-btn').forEach(function(b) { b.classList.remove('active'); });
   el.classList.add('active');
   var cont = document.getElementById('historial-jugador');
-  cont.innerHTML = '<div class="loading">Cargando historial</div>';
-  apiCallWithParam("getHistorialJugador", "email", email)
-    .then(function(data) {
-      if (!data.historial || data.historial.length === 0) {
-        cont.innerHTML = '<div class="empty-msg">Sin resultados registrados</div>';
-        return;
-      }
-      var total = data.historial.length;
-      var cumple = data.historial.filter(function(h) { return h.cumple === true; }).length;
-      var pct = total > 0 ? Math.round(cumple / total * 100) : 0;
+  cont.innerHTML = '<div class="loading">Cargando...</div>';
+  jsonpCall({ action: 'getHistorialJugador', email: email }, function(err, data) {
+    if (err || data.error) { cont.innerHTML = '<div class="empty">Error</div>'; return; }
+    renderHistorial(data, cont);
+  });
+}
 
-      var html = '<div class="section-title">Historial</div>';
-      html += '<div class="stat-row">';
-      html += '<div class="stat-box navy"><div class="stat-val">' + total + '</div><div class="stat-lbl">Ejercicios registrados</div></div>';
-      html += '<div class="stat-box green"><div class="stat-val green">' + cumple + '</div><div class="stat-lbl">Sobre exigencia</div></div>';
-      html += '<div class="stat-box ' + (pct >= 70 ? 'green' : 'orange') + '"><div class="stat-val ' + (pct >= 70 ? 'green' : 'orange') + '">' + pct + '%</div><div class="stat-lbl">% cumplimiento</div></div>';
-      html += '</div>';
+function renderHistorial(data, cont) {
+  if (!data.evolucion || data.evolucion.length === 0) { cont.innerHTML = '<div class="empty">Sin resultados</div>'; return; }
+  var s = data.stats;
+  var html = '<div class="stats-grid" style="grid-template-columns:repeat(5, 1fr)">';
+  html += '<div class="stat-card blue"><div class="stat-label">Sesiones</div><div class="stat-value">' + s.totalSesiones + '</div><div class="stat-sub">participadas</div></div>';
+  html += '<div class="stat-card"><div class="stat-label">Ejercicios</div><div class="stat-value">' + s.totalEjercicios + '</div><div class="stat-sub">realizados</div></div>';
+  html += '<div class="stat-card green"><div class="stat-label">Cumplidos</div><div class="stat-value">' + s.ejerciciosCumplidos + '</div><div class="stat-sub">sobre exigencia</div></div>';
+  var col = colorByCumplimiento(s.pctCumplimiento);
+  html += '<div class="stat-card green"><div class="stat-label">% Cumplimiento</div><div class="stat-value ' + col.txt + '">' + s.pctCumplimiento + '%</div><div class="stat-sub">cumple exig.</div></div>';
+  var col2 = colorByPct(s.pctAciertos);
+  html += '<div class="stat-card purple"><div class="stat-label">% Aciertos</div><div class="stat-value ' + col2.txt + '">' + s.pctAciertos + '%</div><div class="stat-sub">global</div></div>';
+  html += '</div>';
 
-      data.historial.forEach(function(h) {
-        var scoreClass = h.cumple === true ? 'ok' : h.cumple === false ? 'bad' : 'warn';
-        var isMojado = (h.tipo || '').toLowerCase().includes('mojado');
-        html += '<div class="historial-ej">';
-        html += '<div class="historial-ej-header">';
-        html += '<span class="historial-fecha">' + h.fecha + '</span>';
-        html += '<span class="historial-tipo">' + h.tipo + ' · ' + h.grupo + ' · Ej ' + h.numeroEj + '</span>';
-        html += '<span class="badge ' + (isMojado ? 'badge-mojado' : 'badge-seco') + '">' + (h.tipo || '') + '</span>';
-        html += '</div>';
-        html += '<div class="historial-ej-body">';
-        html += '<div class="historial-score ' + scoreClass + '">' + h.totalAciertos + '/' + h.ammo + '</div>';
-        html += '<div><div class="historial-desc">' + (h.descripcion || '') + '</div>';
-        html += '<div class="historial-exig">Exigencia: ' + h.exigNum + ' · ' + (h.ammo ? Math.round(h.exigNum / h.ammo * 100) : 0) + '%</div></div>';
-        html += '</div></div>';
-      });
+  html += '<div class="card" style="margin-bottom:18px"><div class="card-header"><div class="card-title">Evolución</div><div class="card-sub">por sesión</div></div><div class="chart-wrap-tall"><canvas id="chart-evol"></canvas></div></div>';
 
-      cont.innerHTML = html;
+  html += '<div class="s-title">Detalle por sesión</div>';
+  data.evolucion.slice().reverse().forEach(function(e) {
+    html += '<div class="hist-item"><div class="hist-head"><div class="hist-fecha">' + e.fecha + '</div><div class="hist-meta">' + e.tipo + ' · ' + e.grupo + '</div></div><div class="hist-body">';
+    e.ejercicios.forEach(function(ej) {
+      var pct = ej.ammo > 0 ? (ej.aciertos / ej.ammo * 100) : 0;
+      var exigPct = ej.ammo > 0 ? (ej.exigencia / ej.ammo * 100) : 0;
+      var c = colorClass(pct, exigPct);
+      html += '<div class="hist-ej-row"><div class="hist-ej-num">Ej ' + ej.numero + '</div><div class="hist-ej-desc">' + (ej.descripcion || '').substring(0, 80) + '</div><div class="hist-ej-score">' + ej.aciertos + '/' + ej.ammo + '</div><div class="hist-ej-pct ' + c.txt + '">' + Math.round(pct) + '%</div></div>';
     });
+    html += '</div></div>';
+  });
+
+  cont.innerHTML = html;
+
+  if (chartEvolucion) chartEvolucion.destroy();
+  var ctx = document.getElementById('chart-evol').getContext('2d');
+  chartEvolucion = new Chart(ctx, {
+    type: 'line',
+    data: { labels: data.evolucion.map(function(e) { return e.fecha; }), datasets: [
+      { label: '% Cumplimiento', data: data.evolucion.map(function(e) { return e.pctCumplimiento; }), borderColor: '#00d4a8', backgroundColor: 'rgba(0,212,168,0.1)', tension: 0.3, fill: true, borderWidth: 2.5 },
+      { label: '% Aciertos', data: data.evolucion.map(function(e) { return e.pctAciertos; }), borderColor: '#ff9b6b', tension: 0.3, fill: false, borderWidth: 2.5 }
+    ] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#9aa5bc', font: { family: 'Manrope', size: 12 } } }, tooltip: { backgroundColor: '#1a2236', borderColor: '#2a3550', borderWidth: 1, titleColor: '#e8ecf4', bodyColor: '#9aa5bc' } },
+      scales: { y: { min: 0, max: 100, grid: { color: '#1a2236' }, ticks: { color: '#5a6680', callback: function(v) { return v + '%'; } } }, x: { grid: { color: '#1a2236' }, ticks: { color: '#5a6680' } } }
+    }
+  });
+}
+
+var ejerciciosLoaded = false;
+function loadEjercicios() {
+  jsonpCall({ action: 'getEstadisticasEjercicios' }, function(err, data) {
+    if (err || data.error) return;
+    ejerciciosLoaded = true;
+    var cont = document.getElementById('ejercicios-list');
+    if (!data.ejercicios || data.ejercicios.length === 0) { cont.innerHTML = '<div class="empty">Sin datos</div>'; return; }
+    cont.innerHTML = data.ejercicios.map(function(e) {
+      var col1 = colorByPct(e.pctCumplimiento);
+      var col2 = colorByPct(e.pctAciertos);
+      return '<div class="ej-row"><div class="ej-num">Ej ' + e.numero + '</div><div class="ej-desc"><div class="ej-title">' + (e.descripcion || '') + '</div><div class="ej-sub">' + e.sesionFecha + ' · ' + e.sesionTipo + ' · ' + e.sesionGrupo + ' · Exig ' + e.exigencia + '/' + e.ammo + '</div></div><div class="ej-metric"><div class="ej-metric-val">' + e.intentos + '</div><div class="ej-metric-lbl">intentos</div></div><div class="ej-metric"><div class="ej-metric-val">' + e.promedioAciertos + '</div><div class="ej-metric-lbl">promedio</div></div><div class="ej-metric"><div class="ej-metric-val ' + col2.txt + '">' + e.pctAciertos + '%</div><div class="ej-metric-lbl">aciertos</div></div><div class="ej-metric"><div class="ej-metric-val ' + col1.txt + '">' + e.pctCumplimiento + '%</div><div class="ej-metric-lbl">cumplimiento</div></div></div>';
+    }).join('');
+  });
 }
 </script>
 </body>
