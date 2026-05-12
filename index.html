@@ -204,18 +204,14 @@ var currentUser = null;
 var jsonpCounter = 0;
 
 function jsonpCall(params, callback) {
-  jsonpCounter++;
-  var callbackName = 'jsonpCb' + jsonpCounter;
-  var url = APPS_SCRIPT_URL + '?callback=' + callbackName;
+  var url = APPS_SCRIPT_URL + '?';
   Object.keys(params).forEach(function(k) { url += '&' + k + '=' + encodeURIComponent(params[k]); });
-  var script = document.createElement('script');
-  script.src = url;
-  window[callbackName] = function(data) { callback(null, data); delete window[callbackName]; document.body.removeChild(script); };
-  script.onerror = function(e) {
-  console.log('onerror event:', e);
-  callback('Error de red', null); delete window[callbackName]; document.body.removeChild(script); };
-  document.body.appendChild(script);
+  fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(data) { callback(null, data); })
+    .catch(function(err) { console.log('fetch err:', err); callback('Error de red', null); });
 }
+
 
 function parseJwt(token) {
   var base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
