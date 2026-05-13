@@ -98,7 +98,7 @@ body::before {
 .sesion-item:hover { border-left-color:var(--accent2); }
 .sesion-item.active { border-left-color:var(--accent); background:var(--bg3); }
 .sesion-fecha { font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--accent); font-weight:500; }
-.sesion-tipo { font-size:14px; font-weight:700; margin-top:3px; letter-spacing:-0.01em; }
+.sesion-tipo { font-size:14px; font-weight:700; margin-top:3px; letter-spacing:-0.01em; line-height:1.25; }
 .sesion-meta { font-size:11px; color:var(--muted); margin-top:2px; font-family:"JetBrains Mono",monospace; }
 .planilla-wrap { overflow-x:auto; border-radius:8px; border:1px solid var(--border); }
 table.planilla { border-collapse:collapse; width:100%; font-size:12px; background:var(--bg2); table-layout:fixed; }
@@ -108,11 +108,11 @@ th.ej-h .ej-d { display:block; font-size:9px; font-weight:400; color:var(--text-
 th.ej-x { background:rgba(255,155,107,0.12); color:var(--accent2); font-family:"JetBrains Mono",monospace; font-size:10px; font-weight:600; }
 th.t-h { background:var(--bg3); color:var(--text-dim); font-family:"JetBrains Mono",monospace; font-size:10px; font-weight:500; width:52px; }
 th.jug-h { background:var(--bg4); color:var(--text); font-weight:700; font-size:12px; text-align:left; width:58px; }
-table.planilla td { background:var(--bg2); font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--text-dim); }
+table.planilla td { background:var(--bg2); font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--text); }
 td.jug-c { font-family:"Manrope",sans-serif; font-size:14px; font-weight:700; color:var(--text); text-align:left; background:var(--bg3); }
-.val-ok { color:var(--green); font-weight:600; }
-.val-warn { color:var(--warn); font-weight:600; }
-.val-bad { color:var(--red); font-weight:500; }
+.val-ok { color:var(--text); font-weight:600; }
+.val-warn { color:var(--warn); font-weight:700; }
+.val-bad { color:var(--red); font-weight:700; }
 .val-em { color:var(--muted); }
 .jug-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(64px,1fr)); gap:6px; margin-bottom:20px; }
 .jug-btn { background:var(--bg2); border:1px solid var(--border); color:var(--text-dim); padding:11px 6px; font-size:14px; font-weight:700; border-radius:6px; cursor:pointer; transition:all 0.15s; font-family:inherit; }
@@ -129,7 +129,9 @@ td.jug-c { font-family:"Manrope",sans-serif; font-size:14px; font-weight:700; co
 .hist-ej-desc { color:var(--text-dim); font-size:12px; }
 .hist-ej-score { font-family:"JetBrains Mono",monospace; font-size:14px; font-weight:700; text-align:right; }
 .hist-ej-pct { font-family:"JetBrains Mono",monospace; font-size:12px; text-align:right; font-weight:600; }
-.ej-list .ej-row { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:14px 18px; margin-bottom:8px; display:grid; grid-template-columns:50px 1fr 100px 100px 90px 110px; gap:18px; align-items:center; }
+.ej-list .ej-row { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:14px 18px; margin-bottom:8px; display:grid; grid-template-columns:50px 1fr 100px 100px 90px 110px; gap:18px; align-items:center; cursor:pointer; transition:all 0.15s; }
+.ej-list .ej-row:hover { border-color:var(--accent); background:var(--bg3); }
+.ej-list .ej-row.active { border-color:var(--accent); background:var(--bg3); }
 .ej-num { font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--accent); background:var(--bg3); padding:5px 8px; border-radius:5px; text-align:center; font-weight:600; }
 .ej-desc { font-size:13px; }
 .ej-desc .ej-title { font-weight:600; color:var(--text); margin-bottom:3px; line-height:1.3; }
@@ -137,14 +139,24 @@ td.jug-c { font-family:"Manrope",sans-serif; font-size:14px; font-weight:700; co
 .ej-metric { text-align:center; }
 .ej-metric-val { font-family:"JetBrains Mono",monospace; font-size:18px; font-weight:700; }
 .ej-metric-lbl { font-family:"JetBrains Mono",monospace; font-size:9px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin-top:2px; }
+.ej-detail { background:var(--bg2); border:1px solid var(--accent); border-radius:10px; padding:16px 18px; margin-bottom:14px; }
+.ej-detail-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+.ej-detail-title { font-size:14px; font-weight:700; }
+.ej-detail-sub { font-size:11px; color:var(--text-dim); font-family:"JetBrains Mono",monospace; margin-top:4px; }
+.ej-detail-close { font-family:inherit; font-size:11px; padding:5px 12px; background:transparent; color:var(--muted); border:1px solid var(--border); border-radius:4px; cursor:pointer; }
+.ej-detail-close:hover { color:var(--red); border-color:var(--red); }
+.ej-detail-results { display:grid; grid-template-columns:repeat(auto-fill, minmax(170px,1fr)); gap:8px; }
+.ej-result-row { background:var(--bg3); border:1px solid var(--border); border-radius:6px; padding:9px 12px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.ej-result-codigo { font-weight:700; font-size:13px; }
+.ej-result-score { font-family:"JetBrains Mono",monospace; font-size:13px; font-weight:700; }
 .empty { padding:60px 40px; text-align:center; color:var(--muted); font-family:"JetBrains Mono",monospace; font-size:12px; }
 .loading { padding:50px; text-align:center; color:var(--muted); font-family:"JetBrains Mono",monospace; font-size:12px; }
 @media (max-width:1100px) {
   .stats-grid { grid-template-columns:repeat(3, 1fr); }
   .row-2 { grid-template-columns:1fr; }
   .grid-sesion { grid-template-columns:1fr; }
-  .ej-row { grid-template-columns:50px 1fr; }
-  .ej-row .ej-metric { display:none; }
+  .ej-list .ej-row { grid-template-columns:50px 1fr; }
+  .ej-list .ej-row .ej-metric { display:none; }
 }
 </style>
 </head>
@@ -192,7 +204,7 @@ td.jug-c { font-family:"Manrope",sans-serif; font-size:14px; font-weight:700; co
       <div id="historial-jugador"></div>
     </div>
     <div class="page" id="page-ejercicios">
-      <div class="s-title">Estadísticas por Ejercicio <span class="s-title-sub">ordenado por dificultad</span></div>
+      <div class="s-title">Estadísticas por Ejercicio <span class="s-title-sub">ordenado por dificultad — haz click para ver detalle</span></div>
       <div id="ejercicios-list" class="ej-list"><div class="loading">Cargando</div></div>
     </div>
   </main>
@@ -201,7 +213,6 @@ td.jug-c { font-family:"Manrope",sans-serif; font-size:14px; font-weight:700; co
 <script>
 var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz3p7ZHGNou1jGNMDMSz2Hs2E6yJnIvZwTopJWJh7afpFI7nKvAVy2SYezUlbnUxa8/exec";
 var currentUser = null;
-var jsonpCounter = 0;
 
 function jsonpCall(params, callback) {
   var url = APPS_SCRIPT_URL + '?';
@@ -211,7 +222,6 @@ function jsonpCall(params, callback) {
     .then(function(data) { callback(null, data); })
     .catch(function(err) { console.log('fetch err:', err); callback('Error de red', null); });
 }
-
 
 function parseJwt(token) {
   var base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
@@ -275,6 +285,13 @@ function nav(name, el) {
 function colorClass(pct, exigPct) { if (pct >= exigPct) return { txt: 'pct-green', bar: 'bar-green' }; if (pct >= exigPct * 0.8) return { txt: 'pct-warn', bar: 'bar-warn' }; return { txt: 'pct-red', bar: 'bar-red' }; }
 function colorByCumplimiento(pct) { if (pct >= 100) return { txt: 'pct-green', bar: 'bar-green' }; if (pct >= 85) return { txt: 'pct-green-light', bar: 'bar-green-light' }; if (pct >= 70) return { txt: 'pct-warn', bar: 'bar-warn' }; return { txt: 'pct-red', bar: 'bar-red' }; }
 function colorByPct(pct) { if (pct >= 70) return { txt: 'pct-green', bar: 'bar-green' }; if (pct >= 50) return { txt: 'pct-warn', bar: 'bar-warn' }; return { txt: 'pct-red', bar: 'bar-red' }; }
+
+// Para celdas de planilla — verde queda blanco, amarillo y rojo se mantienen
+function cellClass(pct, exigPct) {
+  if (pct >= exigPct) return 'val-ok';
+  if (pct >= exigPct * 0.8) return 'val-warn';
+  return 'val-bad';
+}
 
 var overviewLoaded = false;
 var chartDistribucion = null;
@@ -358,14 +375,17 @@ function loadSesiones() {
     var cont = document.getElementById('lista-sesiones');
     if (!data.sesiones || data.sesiones.length === 0) { cont.innerHTML = '<div class="empty">Sin sesiones</div>'; return; }
     cont.innerHTML = data.sesiones.map(function(s) {
-      return '<div class="sesion-item" onclick="loadDetalleSesion(\'' + s.id + '\', this)"><div class="sesion-fecha">' + s.fechaDisplay + '</div><div class="sesion-tipo">' + s.tipo + ' · ' + s.grupo + '</div><div class="sesion-meta">' + (s.madrijim || '') + '</div></div>';
+      var nombre = s.nombre || (s.tipo + ' · ' + s.grupo);
+      var meta = s.fechaDisplay ? s.fechaDisplay : '';
+      if (s.madrijim) meta += (meta ? ' · ' : '') + s.madrijim;
+      return '<div class="sesion-item" onclick="loadDetalleSesion(\'' + s.id + '\', this)"><div class="sesion-fecha">' + (s.fechaDisplay || '—') + '</div><div class="sesion-tipo">' + nombre + '</div><div class="sesion-meta">' + (s.madrijim || '') + '</div></div>';
     }).join('');
   });
 }
 
 function loadDetalleSesion(idSesion, el) {
   document.querySelectorAll('.sesion-item').forEach(function(e) { e.classList.remove('active'); });
-  el.classList.add('active');
+  if (el) el.classList.add('active');
   var cont = document.getElementById('detalle-sesion');
   cont.innerHTML = '<div class="loading">Cargando...</div>';
   jsonpCall({ action: 'getSesionDetalle', idSesion: idSesion }, function(err, data) {
@@ -413,14 +433,14 @@ function renderPlanilla(data) {
         if (ts.length === 0) {
           var total = tarRes.reduce(function(s, t) { return s + (Number(t.aciertos) || 0); }, 0);
           var pct = e.ammo > 0 ? (total / e.ammo * 100) : 0;
-          var cls = colorClass(pct, exigPct).txt.replace('pct-', 'val-').replace('val-green', 'val-ok').replace('val-red', 'val-bad');
+          var cls = cellClass(pct, exigPct);
           html += '<td class="' + cls + '">' + (total || '—') + '</td>';
         } else {
           ts.forEach(function(t, ti) {
             var tr = tarRes[ti];
             var ac = tr ? tr.aciertos : '';
             var pct = (t.ammo > 0 && ac !== '') ? (ac / t.ammo * 100) : 0;
-            var cls = ac !== '' && ac !== null ? colorClass(pct, exigPct).txt.replace('pct-', 'val-').replace('val-green', 'val-ok').replace('val-red', 'val-bad') : 'val-em';
+            var cls = (ac !== '' && ac !== null) ? cellClass(pct, exigPct) : 'val-em';
             html += '<td class="' + cls + '">' + (ac !== '' && ac !== null ? ac : '—') + '</td>';
           });
         }
@@ -473,7 +493,8 @@ function renderHistorial(data, cont) {
 
   html += '<div class="s-title">Detalle por sesión</div>';
   data.evolucion.slice().reverse().forEach(function(e) {
-    html += '<div class="hist-item"><div class="hist-head"><div class="hist-fecha">' + e.fecha + '</div><div class="hist-meta">' + e.tipo + ' · ' + e.grupo + '</div></div><div class="hist-body">';
+    var nombreSes = e.nombre || (e.tipo + ' · ' + e.grupo);
+    html += '<div class="hist-item"><div class="hist-head"><div class="hist-fecha">' + e.fecha + '</div><div class="hist-meta">' + nombreSes + '</div></div><div class="hist-body">';
     e.ejercicios.forEach(function(ej) {
       var pct = ej.ammo > 0 ? (ej.aciertos / ej.ammo * 100) : 0;
       var exigPct = ej.ammo > 0 ? (ej.exigencia / ej.ammo * 100) : 0;
@@ -501,19 +522,93 @@ function renderHistorial(data, cont) {
   });
 }
 
+// ─────────── EJERCICIOS ───────────
 var ejerciciosLoaded = false;
+var ejerciciosData = null;
+var ejercicioAbierto = null;
+
 function loadEjercicios() {
   jsonpCall({ action: 'getEstadisticasEjercicios' }, function(err, data) {
     if (err || data.error) return;
     ejerciciosLoaded = true;
-    var cont = document.getElementById('ejercicios-list');
-    if (!data.ejercicios || data.ejercicios.length === 0) { cont.innerHTML = '<div class="empty">Sin datos</div>'; return; }
-    cont.innerHTML = data.ejercicios.map(function(e) {
-      var col1 = colorByPct(e.pctCumplimiento);
-      var col2 = colorByPct(e.pctAciertos);
-      return '<div class="ej-row"><div class="ej-num">Ej ' + e.numero + '</div><div class="ej-desc"><div class="ej-title">' + (e.descripcion || '') + '</div><div class="ej-sub">' + e.sesionFecha + ' · ' + e.sesionTipo + ' · ' + e.sesionGrupo + ' · Exig ' + e.exigencia + '/' + e.ammo + '</div></div><div class="ej-metric"><div class="ej-metric-val">' + e.intentos + '</div><div class="ej-metric-lbl">intentos</div></div><div class="ej-metric"><div class="ej-metric-val">' + e.promedioAciertos + '</div><div class="ej-metric-lbl">promedio</div></div><div class="ej-metric"><div class="ej-metric-val ' + col2.txt + '">' + e.pctAciertos + '%</div><div class="ej-metric-lbl">aciertos</div></div><div class="ej-metric"><div class="ej-metric-val ' + col1.txt + '">' + e.pctCumplimiento + '%</div><div class="ej-metric-lbl">cumplimiento</div></div></div>';
-    }).join('');
+    ejerciciosData = data;
+    renderEjerciciosList();
   });
+}
+
+function renderEjerciciosList() {
+  var cont = document.getElementById('ejercicios-list');
+  if (!ejerciciosData.ejercicios || ejerciciosData.ejercicios.length === 0) { cont.innerHTML = '<div class="empty">Sin datos</div>'; return; }
+  cont.innerHTML = ejerciciosData.ejercicios.map(function(e) {
+    var col1 = colorByPct(e.pctCumplimiento);
+    var col2 = colorByPct(e.pctAciertos);
+    var activeClass = (ejercicioAbierto === e.id) ? ' active' : '';
+    var detailHtml = (ejercicioAbierto === e.id) ? renderEjercicioDetalle(e) : '';
+    return detailHtml + '<div class="ej-row' + activeClass + '" onclick="toggleEjercicio(\'' + e.id + '\', \'' + e.idSesion + '\')"><div class="ej-num">Ej ' + e.numero + '</div><div class="ej-desc"><div class="ej-title">' + (e.descripcion || '') + '</div><div class="ej-sub">' + (e.sesionNombre || (e.sesionFecha + ' · ' + e.sesionTipo + ' · ' + e.sesionGrupo)) + ' · Exig ' + e.exigencia + '/' + e.ammo + '</div></div><div class="ej-metric"><div class="ej-metric-val">' + e.intentos + '</div><div class="ej-metric-lbl">intentos</div></div><div class="ej-metric"><div class="ej-metric-val">' + e.promedioAciertos + '</div><div class="ej-metric-lbl">promedio</div></div><div class="ej-metric"><div class="ej-metric-val ' + col2.txt + '">' + e.pctAciertos + '%</div><div class="ej-metric-lbl">aciertos</div></div><div class="ej-metric"><div class="ej-metric-val ' + col1.txt + '">' + e.pctCumplimiento + '%</div><div class="ej-metric-lbl">cumplimiento</div></div></div>';
+  }).join('');
+}
+
+function renderEjercicioDetalle(e) {
+  if (!ejercicioDetalleCache[e.id]) return '<div class="ej-detail"><div class="loading">Cargando detalle...</div></div>';
+  var d = ejercicioDetalleCache[e.id];
+  var html = '<div class="ej-detail"><div class="ej-detail-head"><div><div class="ej-detail-title">Resultados del ejercicio</div><div class="ej-detail-sub">' + (d.sesionNombre || '') + '</div></div><button class="ej-detail-close" onclick="event.stopPropagation(); cerrarEjercicio()">Cerrar</button></div>';
+  if (d.resultados.length === 0) {
+    html += '<div class="empty">Sin resultados</div>';
+  } else {
+    html += '<div class="ej-detail-results">';
+    d.resultados.forEach(function(r) {
+      var pct = e.ammo > 0 ? (r.aciertos / e.ammo * 100) : 0;
+      var exigPct = e.exigPct;
+      var c = colorClass(pct, exigPct);
+      html += '<div class="ej-result-row"><div class="ej-result-codigo">' + r.codigo + '</div><div class="ej-result-score ' + c.txt + '">' + r.aciertos + '/' + e.ammo + ' · ' + Math.round(pct) + '%</div></div>';
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+var ejercicioDetalleCache = {};
+
+function toggleEjercicio(idEjercicio, idSesion) {
+  if (ejercicioAbierto === idEjercicio) {
+    cerrarEjercicio();
+    return;
+  }
+  ejercicioAbierto = idEjercicio;
+  renderEjerciciosList();
+
+  if (ejercicioDetalleCache[idEjercicio]) {
+    renderEjerciciosList();
+    return;
+  }
+  jsonpCall({ action: 'getSesionDetalle', idSesion: idSesion }, function(err, data) {
+    if (err || data.error) return;
+    var ejInfo = null;
+    for (var i = 0; i < data.ejercicios.length; i++) {
+      if (data.ejercicios[i].id === idEjercicio) { ejInfo = data.ejercicios[i]; break; }
+    }
+    var resArr = (data.resultadosEjMap && data.resultadosEjMap[idEjercicio]) || [];
+    var rtm = data.resultadosTarMap || {};
+    var me = data.mapaEq || {};
+    var resultados = resArr.map(function(r) {
+      var tarRes = rtm[r.id] || [];
+      var totalAciertos = tarRes.reduce(function(s, t) { return s + (Number(t.aciertos) || 0); }, 0);
+      return { codigo: me[r.email] || r.email, aciertos: totalAciertos };
+    }).filter(function(r) { return r.aciertos > 0 || r.aciertos === 0; });
+    resultados.sort(function(a, b) { return b.aciertos - a.aciertos; });
+
+    ejercicioDetalleCache[idEjercicio] = {
+      sesionNombre: data.sesion ? (data.sesion.nombre || (data.sesion.fechaDisplay + ' · ' + data.sesion.tipo + ' · ' + data.sesion.grupo)) : '',
+      resultados: resultados
+    };
+    renderEjerciciosList();
+  });
+}
+
+function cerrarEjercicio() {
+  ejercicioAbierto = null;
+  renderEjerciciosList();
 }
 </script>
 </body>
